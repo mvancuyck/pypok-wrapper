@@ -217,7 +217,7 @@ def tf_beam_map( l_map, sigma):
 def pk_beam_map( l_map, sigma):
     return np.exp(-1 *l_map**2 * (sigma**2))
 
-def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False, nnodes=1, partition = '' ):
+def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False, nnodes=1, partition = 'c-batch', salloc='salloc' ):
 
     #Getting the resolution from the data's header
     hdr = fits.getheader(f"{P['map_path']}/{P['map_name']}")
@@ -317,8 +317,7 @@ def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False, nnodes=1, part
             #######################################
             
             #Loads results:
-            M_bb = fits.getdata( P["file_mtt_bb_x"] )
-
+            M_bb = fits.getdata( f"{P['mbb_path']}/{P['mbb_name']}")
 
     else:  M_bb = fits.getdata(f"{P['mbb_path']}/{P['mbb_name']}")
             
