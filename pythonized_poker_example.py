@@ -28,7 +28,7 @@ l         = fits.getdata("dust_l.fits")
 clt       = fits.getdata("dust_clt.fits")
 clnoise   = fits.getdata("dust_clnoise.fits")
 
-embed()
+
 delta_l_over_l = 0.1 #For a logarithmic binning
 remove_1st_bin = True #to improve Mbb's conditioning
 include_noise  = True #to add noise to the simulated datanorm
@@ -47,6 +47,8 @@ b_beam = np.ones(( int(data_map.shape[1] * scale) ,int(data_map.shape[1] * scale
 
 #Initialization
 mask_large,  k_nyquist, kmin,dk_min, k_map, k_bin_tab, k_bin_width, map_k_binning, map_binned, xbintab, x_mtt_bb_m1, k_out = poker_initialization(parfile, data_map, mask, res, scale, beta, a_beam, b_beam, delta_l_over_l, 3, keep_avg = keep_avg, remove_1st_bin = remove_1st_bin  )
+
+embed()
 
 data_map_large = enlarges_masks_apodizes(data_map, mask, scale, window = mask_large, keep_avg = keep_avg)
 
