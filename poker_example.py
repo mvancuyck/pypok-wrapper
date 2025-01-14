@@ -67,6 +67,7 @@ def poker_main():
         bar = Bar('Monte Carlo simulations for noise', max=P['nmc'])
 
         for imc in range(0, P['nmc']):
+            
             bar.next()
 
             noise_map_large, cl_map_noise = gaussian_random_field(l, cl_noise, P["ny_large"], P["nx_large"], P["res"], l_cutoff= P["l_max"],  sigma = P['sigma_beam'], cl_map = cl_map_noise)
