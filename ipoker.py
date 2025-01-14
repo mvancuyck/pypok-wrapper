@@ -217,7 +217,7 @@ def tf_beam_map( l_map, sigma):
 def pk_beam_map( l_map, sigma):
     return np.exp(-1 *l_map**2 * (sigma**2))
 
-def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False ):
+def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False, nnodes=1, partition = '' ):
 
     #Getting the resolution from the data's header
     hdr = fits.getheader(f"{P['map_path']}/{P['map_name']}")
@@ -277,7 +277,49 @@ def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False ):
     if(P['bypass_mtt_bb']):
         print("bypassé")
         M_bb = np.identity(len(l_bins_tab)-1)
-    elif(load_mbb_directly == False): M_bb = compute_mbb(P) 
+    elif(load_mbb_directly == False): 
+        #M_bb = compute_mbb(P) 
+        #Save the needed arrays for the mixing matrix computation:
+            f = fits.PrimaryHDU(patch)
+            hdu = fits.HDUList([f])
+            hdu.writeto(P["mask_file"],  overwrite = True)
+
+            f = fits.PrimaryHDU(a_beam)
+            hdu = fits.HDUList([f])
+            hdu.writeto(P["beam_a_file"],  overwrite = True)
+
+            f = fits.PrimaryHDU(b_beam)
+            hdu = fits.HDUList([f])
+            hdu.writeto(P["beam_b_file"],  overwrite = True)
+
+            pars = set_pars(res, 
+                            file_mtt_bb_x = P["file_mtt_bb_x"] ,  
+                            scale = P["scale"], 
+                            delta_l_over_l = P['dll'],
+                            beta = P["beta"],
+                            log_binning = int(np.float(np.bool(P['dll']))), 
+                            nx = nx, ny = ny,
+                            nx_large =  int(ny * P["scale"]), ny_large =  int(nx * P["scale"]), 
+                            remove_1st_bin = int(np.float(P["remove_1st_bin"])),
+                            keep_avg = int(np.float(0)),  
+                            apod_length = P["apod_length"] )    
+            params2ascii( pars )
+        
+            #Save the pars dictionnary, in that precise order, needed for the computation of the mixing matrix.
+            print("begin poker_mbb")
+
+            ####################################### 
+            #Compute the mode mixing matrix.
+            if(salloc=='salloc'): subprocess.run( ["salloc", "--ntasks-per-node=24", f"--nodes={nnodes}", "-p", f"{partition}" , "mpirun", "poker_mbb_mpi", P["outparfile"]])
+            if(salloc=='sbash' ): subprocess.run( [ "mpirun", "poker_mbb_mpi", P["outparfile"]])
+
+            print( "MBB COMPUTED. ")
+            #######################################
+            
+            #Loads results:
+            M_bb = fits.getdata( P["file_mtt_bb_x"] )
+
+
     else:  M_bb = fits.getdata(f"{P['mbb_path']}/{P['mbb_name']}")
             
     #Discard DC bin to improve M_bb's conditioning
@@ -424,3 +466,15 @@ def Nmc_pll(nmc, l, cl_signal, ny, nx, iy0, ix0, res, beta, l, map_l_power_beta,
     return pk_final, sigma_pk_final 
 #--- Worker for MC simulations
 '''
+
+def params2ascii( pars, name = None ):
+    """
+    Write the pars file
+    """
+    if(name is None):
+        f = open(pars["outparfile"], "w")
+    else: f = open(name, "w")
+    for key in zip(pars.items()):
+        f.write(str(key[0][0])+" = "+  str(key[0][1]) +"\n")
+    f.close()
+    return True
