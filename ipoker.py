@@ -8,17 +8,12 @@ from scipy import interpolate
 import datetime
 import scipy.constants as cst
 import subprocess
-from scipy.ndimage import gaussian_filter
-import powspec
-from scipy.ndimage import gaussian_filter1d
-from scipy.ndimage import generic_filter
 import astropy.convolution as conv
 import matplotlib.pyplot as plt
 import argparse 
 from set_multipols import *
 from progress.bar import Bar
 from mbb import compute_mbb
-
 
 def ipoker(data_map_large, res, beta, l_out, l_bintab, map_l_power_beta, l_map, M_bb_m1, noise_pseudo_pk = None, map_2_large =None):
 
@@ -426,6 +421,17 @@ def load_params(path):
 
     return params
 
+def params2ascii( pars, name = None ):
+    """
+    Write the pars file
+    """
+    if(name is None):
+        f = open(pars["outparfile"], "w")
+    else: f = open(name, "w")
+    for key in zip(pars.items()):
+        f.write(str(key[0][0])+" = "+  str(key[0][1]) +"\n")
+    f.close()
+    return True
 '''
 def worker_nmc(Nmc):
     global _args
@@ -465,15 +471,3 @@ def Nmc_pll(nmc, l, cl_signal, ny, nx, iy0, ix0, res, beta, l, map_l_power_beta,
     return pk_final, sigma_pk_final 
 #--- Worker for MC simulations
 '''
-
-def params2ascii( pars, name = None ):
-    """
-    Write the pars file
-    """
-    if(name is None):
-        f = open(pars["outparfile"], "w")
-    else: f = open(name, "w")
-    for key in zip(pars.items()):
-        f.write(str(key[0][0])+" = "+  str(key[0][1]) +"\n")
-    f.close()
-    return True
