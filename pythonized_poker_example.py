@@ -21,12 +21,12 @@ index     = -3
 beta      = 3 #binning index
 
 #Charging the noise map
-measured_noise = fits.getdata("/home/nponthieu/Soft/Data/dust_noise.fits") #noise of the data
+measured_noise = fits.getdata("dust_noise.fits") #noise of the data
 
 #Charging the multipols l and the corresponding values of input dust power spectrum and of the input noise power spectrum
-l         = fits.getdata("/home/nponthieu/Soft/Data/dust_l.fits")
-clt       = fits.getdata("/home/nponthieu/Soft/Data/dust_clt.fits")
-clnoise   = fits.getdata("/home/nponthieu/Soft/Data/dust_clnoise.fits")
+l         = fits.getdata("dust_l.fits")
+clt       = fits.getdata("dust_clt.fits")
+clnoise   = fits.getdata("dust_clnoise.fits")
 
 embed()
 delta_l_over_l = 0.1 #For a logarithmic binning
