@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 #plt.style.use('classic')
 import subprocess
 from scipy.ndimage import gaussian_filter
-
 from scipy.ndimage import gaussian_filter1d
 from scipy.ndimage import generic_filter
 import astropy.convolution as conv
@@ -103,8 +102,6 @@ def poker_initialization(parfile, data_map, mask, res, scale, beta, a_beam, b_be
         hdu = fits.HDUList([f])
         hdu.writeto("bintab.fits",  overwrite = True)
 
-        #params2ascii( pars, parfile )
-        #le .par est deja ecrit, je ferait la fonction quand j'aurais implementer un dictionnaire contenant tous les arguments.
         ####################################### 
         subprocess.run(["poker_mbb",parfile])
         print( "MBB COMPUTED. ")
@@ -376,7 +373,6 @@ def enlarges_masks_apodizes(Map, mask, scale,  apod_length = 0,  window = np.zer
         window = np.zeros((ny_large, nx_large))
         window[iy0:iy0+Map.shape[1], ix0:ix0+Map.shape[0]] = mask
         if(apod_length >= 0 ):
-            print("before apod")
             window = window_apodization(window, apod_length)
     else: return_window = False
 
@@ -445,11 +441,11 @@ def window_apodization(window, apod_length, kernel_type = "sincos" ):
 
     final_window = conv.convolve(innerWindow, kernel)
     
-    embed()
-
+    '''
     plt.imshow(final_window, origin = "lower")
     plt.colorbar()
     plt.show()
+    '''
 
 
     
