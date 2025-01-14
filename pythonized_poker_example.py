@@ -48,8 +48,6 @@ b_beam = np.ones(( int(data_map.shape[1] * scale) ,int(data_map.shape[1] * scale
 #Initialization
 mask_large,  k_nyquist, kmin,dk_min, k_map, k_bin_tab, k_bin_width, map_k_binning, map_binned, xbintab, x_mtt_bb_m1, k_out = poker_initialization(parfile, data_map, mask, res, scale, beta, a_beam, b_beam, delta_l_over_l, 3, keep_avg = keep_avg, remove_1st_bin = remove_1st_bin  )
 
-embed()
-
 data_map_large = enlarges_masks_apodizes(data_map, mask, scale, window = mask_large, keep_avg = keep_avg)
 
 input_data_pseudo_pk, input_data_pk_out, input_sigma_pk_out = ipoker(data_map_large, res, k_out, beta, map_binned, map_k_binning, x_mtt_bb_m1,  remove_1st_bin = remove_1st_bin )
