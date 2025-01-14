@@ -1,0 +1,55 @@
+#####POKER parameters#####
+
+#Names of files to be loaded
+#---------------------------
+map_path = "." #[Jy/sr]
+map_name = "dust_map.fits"
+sigma_beam = 0
+
+mask_path = "."
+mask_name = "mask_apod.fits"
+make_a_mask = False
+n_holes = 4
+hole_ratio = 20
+
+l_file = "/home/nponthieu/Soft/Data/dust_l.fits"
+cl_signal_file = "/home/nponthieu/Soft/Data/dust_clt.fits"
+
+include_noise = True
+noise_map = "/home/nponthieu/Soft/Data/dust_noise.fits" #[Jy/sr]
+cl_noise_file = "/home/nponthieu/Soft/Data/dust_clnoise.fits"
+#---------------------------
+
+#POKER parameters
+#---------------------------
+beta = 3
+dll = 0.1
+nmc = 20 #Number of random realizations used to determine the noise pseudo-power spectrum and the covariance matrix
+
+remove_1st_bin = True 
+keep_avg = True
+include_pix_window_function = False
+bypass_mtt_bb = False
+
+scale = 1.5
+apod_length = 0
+kernel_type= "edges_sincos"
+#---------------------------
+
+#Results
+#---------------------------
+directory = '.'
+outparfile = 'poker.par'
+
+input_bintab = "l_bins_reduce_units.fits"
+map_l_file = "map_l.fits",
+map_l_beta_file= "map_l_beta.fits"
+file_mtt_bb = "mbb.fits"
+path_mtt_bb = "."
+file_mtt_bb_m1 = "mbb_m1.fits"
+mask_file = "mask.fits"
+beam_a_file = "beam_a.fits"
+beam_b_file = "beam_b.fits"
+params_poker_file= "poker.par"
+
+
