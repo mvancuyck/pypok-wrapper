@@ -28,7 +28,7 @@ l         = fits.getdata("/home/nponthieu/Soft/Data/dust_l.fits")
 clt       = fits.getdata("/home/nponthieu/Soft/Data/dust_clt.fits")
 clnoise   = fits.getdata("/home/nponthieu/Soft/Data/dust_clnoise.fits")
 
-
+embed()
 delta_l_over_l = 0.1 #For a logarithmic binning
 remove_1st_bin = True #to improve Mbb's conditioning
 include_noise  = True #to add noise to the simulated datanorm
