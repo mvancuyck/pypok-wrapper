@@ -1,0 +1,37 @@
+
+# compilation
+
+1) load mpi environment
+
+module load mpi/openmpi/4.0.1
+
+2) compilation
+
+make -f Makefile.cmaster.mpi
+
+
+# Run
+
+1) interactive on cluster
+
+module load mpi/openmpi/4.0.1
+srun  --ntasks-per-node=24 -N 1   --pty bash
+mpirun ~/bin/poker_mbb_mpi poker.par
+
+2) sbatch
+
+a) create sbatch file, example below run.sbatch
+
+#!/bin/bash
+#SBATCH -J poker_mbb_mpi 
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --time=1-00:00:00
+#SBATCH --output slurm.output
+
+# load modules
+module purge
+module load mpi/openmpi/4.0.1
+
+cd /home/jclamber/works/Poker/IDL/Test400sec
+mpirun ~/bin/poker_mbb_mpi poker.par

@@ -1,0 +1,58 @@
+
+
+FITSDIR	= /opt/local/lib
+LIBFITS	= cfitsio
+
+#This directory will contain the .o and .mod files
+INCLUDE_DIR   = /tmp
+
+#This directory will contain the executables and should be in your $PATH
+BIN = /Users/ponthien/bin
+
+#HEALPIX   = /Library/Healpix_2.20a
+F90_INCDIR = $(HEALPIX)/include
+F90_LIBDIR = $(HEALPIX)/lib
+
+#F90_FC	    = ifort
+#F90_FLAGS = -O3 -I$(F90_INCDIR) -cm -w -vec_report0 -sox
+F90_FC	= gfortran
+F90_FLAGS = -O3 -DGFORTRAN -fno-second-underscore -fopenmp -ffree-form
+
+F90_FFLAGS  = -I$(F90_INCDIR) -I$(INCLUDE_DIR) $(F90_FLAGS) -I/usr/local/include
+#F90_LDFLAGS = -L$(F90_LIBDIR) -L$(FITSDIR) -L/usr/local/lib -lhealpix -lgif -l$(LIBFITS) -lfftw3
+F90_LDFLAGS = -L$(F90_LIBDIR) -L$(FITSDIR) -L/Users/ponthien/Soft/fftw-3.3.6-pl1 -lhealpix -lgif -l$(LIBFITS) -lfftw3
+OBJS = $(INCLUDE_DIR)/poker_types.o $(INCLUDE_DIR)/poker_input.o $(INCLUDE_DIR)/poker_tools.o
+
+#default: $(OBJS) $(BIN)/poker_mbb $(BIN)/poker_count_tasks $(BIN)/poker_give_map_b
+
+default: $(BIN)/poker_mbb
+
+$(INCLUDE_DIR)/poker_types.o: poker_types.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_types.F90 
+	mv poker_types.o poker_types.mod $(INCLUDE_DIR)
+
+$(INCLUDE_DIR)/poker_tools.o: $(INCLUDE_DIR)/poker_types.o poker_tools.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_tools.F90 
+	mv poker_tools.o poker_tools.mod $(INCLUDE_DIR)
+
+$(INCLUDE_DIR)/poker_input.o: $(INCLUDE_DIR)/poker_types.o poker_input.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_input.F90 
+	mv poker_input.o poker_input.mod $(INCLUDE_DIR)
+
+$(BIN)/poker_mbb: $(OBJS) poker_mbb.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_mbb.F90 
+	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_mbb.o -o $(BIN)/poker_mbb $(F90_LDFLAGS)
+#	rm -f poker_mbb.o
+
+## $(BIN)/poker_give_map_b: $(OBJS) poker_give_map_b.F90
+## 	$(F90_FC) $(F90_FFLAGS) -c poker_give_map_b.F90 
+## 	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_give_map_b.o -o $(BIN)/poker_give_map_b $(F90_LDFLAGS)
+## 	rm -f poker_give_map_b.o
+## 
+## $(BIN)/poker_count_tasks: $(OBJS) poker_count_tasks.F90
+## 	$(F90_FC) $(F90_FFLAGS) -c poker_count_tasks.F90 
+## #	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_count_tasks.o -o $(BIN)/poker_count_tasks $(F90_LDFLAGS)
+##	rm -f poker_count_tasks.o
+
+clean:
+	rm -f $(INCLUDE_DIR)/*mod $(INCLUDE_DIR)/*.o $(BIN)/poker $(BIN)/poker_count_tasks $(BIN)/check_fits_sub

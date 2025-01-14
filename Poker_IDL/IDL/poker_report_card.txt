@@ -1,0 +1,3 @@
+ npix  =        10000
+ nproc =            1
+ CPU time (sec):    7.765256    

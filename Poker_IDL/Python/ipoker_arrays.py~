@@ -1,0 +1,14 @@
+import numpy as np
+import astropy.unist as u
+
+
+def ipoker_arrays( data_map, mask, scale, radius_ratio, apod_lenght, nholes, res_arcmin, a_beam, b_beam, pars, bypass_mtt_bb = 0, bintab_in, clean_poker):
+
+    mask_w8, patch = poker_make_mask(data_map.shape[0], data_map[1], scale, radius_ratio,  nholes, apod_lenght )
+    
+    indices = np.where(patch == 1) #add apodization to mask if required
+    mask_w8[indices] =  mask * mask_weight[indices] 
+
+    
+    
+    return

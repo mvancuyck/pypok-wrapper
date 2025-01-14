@@ -1,0 +1,55 @@
+F90_COMPILER = gfortran
+#F90_FLAGS   = -O3
+F90_FLAGS = -O3 -DGFORTRAN -fno-second-underscore -fopenmp -ffree-form -ffree-line-length-none
+
+NP_BIN       = /Users/lagache/Planck/Work/CIB/CIB_measure/Poker/Bin
+#NP_BIN       = /usr/local/bin
+PROJ_INCLUDE = /Users/lagache/Planck/Work/CIB/CIB_measure/Poker/F90/
+FITSDIR      = /soft/cfitsio/lib
+F90_INCDIR   = $(HEALPIX)/include
+F90_LIBDIR   = $(HEALPIX)/lib
+LIBFITS	     = cfitsio
+F90_FC	     = $(F90_COMPILER)
+#F90_FFLAGS   = -I$(F90_INCDIR) -I$(NP_INCLUDE) -I$(PROJ_INCLUDE) $(F90_FLAGS) -I/usr/local/include
+#F90_LDFLAGS = -L$(F90_LIBDIR) -L$(FITSDIR) -lhealpix -lgif -l$(LIBFITS) -L/usr/lib -lfftw3
+F90_FFLAGS   = -I$(F90_INCDIR) -I$(PROJ_INCLUDE) $(F90_FLAGS) -I/usr/local/include
+# -I$(NP_INCLUDE)
+#-I/usr/local/include
+F90_LDFLAGS = -L$(F90_LIBDIR) -L$(FITSDIR) -lhealpix -lgif -l$(LIBFITS) -L/usr/local/lib -lfftw3
+#-mkl
+HEALPIX   = /soft/Healpix_2.20a
+FFTW      = /soft/fftw-3.2.2
+
+OBJS = $(PROJ_INCLUDE)/poker_types.o $(PROJ_INCLUDE)/poker_input.o $(PROJ_INCLUDE)/poker_tools.o
+
+default: $(OBJS) $(NP_BIN)/poker_mbb $(NP_BIN)/poker_count_tasks $(NP_BIN)/poker_give_map_b
+
+$(PROJ_INCLUDE)/poker_types.o: poker_types.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_types.F90 
+#	mv poker_types.o poker_types.mod $(PROJ_INCLUDE)
+
+$(PROJ_INCLUDE)/poker_tools.o: $(PROJ_INCLUDE)/poker_types.o poker_tools.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_tools.F90 
+#	mv poker_tools.o poker_tools.mod $(PROJ_INCLUDE)
+
+$(PROJ_INCLUDE)/poker_input.o: $(PROJ_INCLUDE)/poker_types.o poker_input.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_input.F90 
+#	mv poker_input.o poker_input.mod $(PROJ_INCLUDE)
+
+$(NP_BIN)/poker_mbb: $(OBJS) poker_mbb.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_mbb.F90 
+	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_mbb.o -o $(NP_BIN)/poker_mbb $(F90_LDFLAGS)
+#	rm -f poker_mbb.o
+
+$(NP_BIN)/poker_give_map_b: $(OBJS) poker_give_map_b.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_give_map_b.F90 
+	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_give_map_b.o -o $(NP_BIN)/poker_give_map_b $(F90_LDFLAGS)
+#	rm -f poker_give_map_b.o
+
+$(NP_BIN)/poker_count_tasks: $(OBJS) poker_count_tasks.F90
+	$(F90_FC) $(F90_FFLAGS) -c poker_count_tasks.F90 
+	$(F90_FC) $(F90_FFLAGS) $(HPX) $(OBJS) poker_count_tasks.o -o $(NP_BIN)/poker_count_tasks $(F90_LDFLAGS)
+#	rm -f poker_count_tasks.o
+
+clean:
+	rm -f $(PROJ_INCLUDE)/*mod $(PROJ_INCLUDE)/*.o $(NP_BIN)/poker $(NP_BIN)/poker_count_tasks

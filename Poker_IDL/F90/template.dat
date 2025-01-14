@@ -1,0 +1,36 @@
+map | string | req | map.fits | data maps for check-kernel
+map_k_binning | string | req | map_k_binning.fits | typically map_k^bin_exp or anyother function
+res_pix   | double | req | 0.00029088821d0 | map resolution (radians) (1arcmin default)
+report_card | string | req | poker_report_card.txt | short execution summary
+mask  | string | req | mask.fits  | Mask real weights
+nbeams | int | req | 1 | set to 2 if the two cross-correlated maps have different beams (beam and beam1)
+beam  | string | req | beam.fits  | beam transfer function (real numbers)
+beam1 | string | req | beam1.fits | beam transfer function (real numbers) of the second map for cross-correlations
+file_map_b  | string | req | map_b.fits | bin addresses
+file_mtt_bb | string | req | poker_mtt_bb_out.fits | mode mixing matrix for temperature only
+file_mtt_bb_1 | string | req | poker_mtt_bb_out_1.fits | mode mixing matrix for temperature only (beam1)
+file_mtt_bb_x | string | req | poker_mtt_bb_out_x.fits | mode mixing matrix for temperature only (cross-beam)
+simul_type | int | req | 1 | 1 for temperature only, 2 for temperature and polarization
+input_bintab | string | req | bintab.fits | bin table for poker_mbb.f90
+include_pix_window_function | int | req | 0 | set to 1 to include pixel window function in Mbb (warning : be consistent in cls2map)
+verb     | int | req | 0 | verbose
+n_cpu_max | int | req | 100 | maximum number of CPUs to be used
+
+#IDL parameters and keywords
+scale | double | req | 1.0d0 | scale for zero padding
+delta_l_over_l | double | req | 0.1d0 | binning width
+beta | double | req | 1.d0 | binning index
+log_binning | int | req | 1 | set to 1 to have a linear binning
+dir | string | req | . | output directory
+outparfile | string | req | poker_out.par | copy of the parameter file passed from IDL to F90
+nx | int | req | 100 | size of obs patch in pixels
+ny | int | req | 100 | size of obs patch in pixels
+nx_large | int | req | 100 | size of obs patch in pixels
+ny_large | int | req | 100 | size of obs patch in pixels
+patch | string | req | patch.fits | obs patch
+remove_1st_bin | int | req | 0 | set to 1 to remove the 1st bin of Mbb to improve its conditionning (DC level)
+k_out | string | req | k_out.fits | output frequency bins
+keep_avg | int | req | 0 | set to 1 to keep the map average
+k_nyquist | double | req | 0.0d0 | Nyquist mode.
+apod_length | int | req | 0 | apodization length in number of pixels
+dk_min | double | req | -1.0d0 | minimum width of frequency bins

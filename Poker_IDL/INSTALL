@@ -1,0 +1,31 @@
+This software is made available under the terms of the GNU GPL licence that
+comes together with this package.
+
+It consists of a collection of IDL and Fortran 90 subroutines.
+
+(1) F90 Compilation
+--------------------
+
+- Edit your own Makefile. A few examples are provided in /F90:
+Poker/F90/Makefile
+Poker/F90/Makefile.example
+Poker/F90/Makefile.franklin
+Poker/F90/myoldMakefile
+Poker/F90/Makefile.inf-calcul1
+
+
+(2) IDL setup:
+--------------
+- Insert the following lines in your $IDL_STARTUP:
+defsysv, "!poker", getenv("POKER_DIR") ; this should point to the current directory where this file is located
+!path = !path + ':' + expand_path("+"+!poker+"/IDL")                                                                                              
+poker_init
+
+
+(3) Test:
+---------
+- /IDL/poker_example.pro guides the user through the estimation of the power
+  spectrum and the associated covariance matrix of two example data sets
+  provided in the directory /Data.
+
+More information can be found at : http://www.ias.u-psud.fr/poker

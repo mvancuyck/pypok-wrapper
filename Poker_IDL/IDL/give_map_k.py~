@@ -1,0 +1,11 @@
+import numpy as np 
+import astropy.units as u
+
+def give_mape_k(res, map_t, map_k, map_kx, map_ky):
+ 
+
+    lmap_x = map_t.shape[0]*res
+    lmap_y = map_t.shape[1](ny*res)
+
+    s = map_t.shape
+    
