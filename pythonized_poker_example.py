@@ -6,11 +6,11 @@ from IPython import embed
 from astropy import wcs
 
 #Charging the mask to apply on the data map
-file_mask = "/home/nponthieu/Soft/Data/mask_raw.fits" #mask_apod.fits"
+file_mask = "mask_raw.fits" #mask_apod.fits"
 mask = fits.getdata(file_mask) 
 
 #Charging the data map
-map_file = "/home/nponthieu/Soft/Data/dust_map.fits"
+map_file = "dust_map.fits"
 data_map = fits.getdata(map_file)
 
 #Getting the resolution from the data's header
