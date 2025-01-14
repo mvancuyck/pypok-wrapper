@@ -2,9 +2,9 @@
 
 #Names of files to be loaded
 #---------------------------
-map_path = "." #[Jy/sr]
-map_name = "dust_map.fits"
-sigma_beam = 0
+map_path = "." 
+map_name = "dust_map.fits" #[Jy/sr]
+sigma_beam = 0 #rad
 
 mask_path = "."
 mask_name = "mask_apod.fits"
