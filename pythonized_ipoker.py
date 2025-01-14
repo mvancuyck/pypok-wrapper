@@ -102,9 +102,11 @@ def poker_initialization(parfile, data_map, mask, res, scale, beta, a_beam, b_be
         hdu = fits.HDUList([f])
         hdu.writeto("bintab.fits",  overwrite = True)
 
+        embed()
         ####################################### 
         subprocess.run(["poker_mbb",parfile])
         print( "MBB COMPUTED. ")
+
 
         #######################################
         map_binned  = fits.getdata( "map_b.fits")  
