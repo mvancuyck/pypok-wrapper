@@ -308,6 +308,8 @@ def set_pars(P, load_mbb_directly = False, bypass_mtt_bb = False, nnodes=1, part
             if(salloc=='salloc'): subprocess.run( ["salloc", "--ntasks-per-node=24", f"--nodes={nnodes}", "-p", f"{partition}" , "mpirun", "poker_mbb_mpi", P["outparfile"]])
             if(salloc=='sbash' ): subprocess.run( [ "mpirun", "poker_mbb_mpi", P["outparfile"]])
 
+            #compute_mbb(P)
+
             print( "MBB COMPUTED. ")
             #######################################
             
@@ -432,6 +434,7 @@ def params2ascii( pars, name = None ):
         f.write(str(key[0][0])+" = "+  str(key[0][1]) +"\n")
     f.close()
     return True
+
 '''
 def worker_nmc(Nmc):
     global _args
